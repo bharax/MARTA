@@ -1,0 +1,40 @@
+# MARTA
+**M**achine le**AR**ning **T**utori**A**l
+- **Instructor:** Margaux Boxho
+- **Co-authors:** Noémie Valminck, Lionel Salesses, Caroline Sainvitu, and Thibaut Van Hoof
+- **When:** Thursday 09/03/2023 from 9h to 12h and Friday 10/03/2023 from 9h to 12h
+
+## Requirements/Prerequisites
+Before attempting the ML tutorial, we encourage you to install `PyTorch` and `jupyter-notebook`.
+
+You have two main ways to perform the installation:
+- `Anaconda` base installation
+- `Pip` base installation. 
+
+### `Anaconda` base installation
+For this installation process, you need to have the `Anaconda` python package manager installed on your laptop. It will be required to create a virtual environment for running the tutorial. You can download `Anaconda` from this [link](https://docs.anaconda.com/anaconda/install/). Once you have `Anaconda` on your computer, you first have to install the virtual environment using the command:
+```
+conda env create -f MARTA_ENV.yml
+```
+The file MARTA_ENV.yml is given in the repository source above. For more information about `Anaconda` environments, you can read [this](https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#activating-an-environment). Once all the packages defined in MARTA_ENV.yml (note that jupyter-notebook is already included) have been installed, you can activate the environment with, 
+```
+conda activate marta
+```
+### `Pip` base installation
+In this approach, you can skip the installation of `Anaconda` and directly install the jupyter-notebook and PyTorch using pip (or pip3). For the installation of jupyter-notebook, you can have a look at [this](https://jupyter.org/install). For the installation of PyTorch, you can follow the instruction [here](https://pytorch.org/get-started/locally/). Select `Stable (1.13.1)`, your OS, `Pip` package, `Python` language, and `CPU` platform. We will not train your network on GPUs for the moment. 
+
+## Launching the jupyter-notebook
+Now that all required packages installed, you can launch the jupyter-notebook as, 
+```
+jupyter-notebook PyTorch_Tutorial1.ipynb
+```
+The file PyTorch_Tutorial1.ipynb is given in the repository source above. 
+
+## References
+For a _first_ introduction to deep learning, we recommand you the YouTube channel [3Blue1Brown](https://www.youtube.com/@3blue1brown). The authors have made four videos for explaining the concept of deep neural networks and how to train them: 
+- [What is a neural network?](https://www.youtube.com/watch?v=aircAruvnKk&ab_channel=3Blue1Brown)
+- [Gradient descent and How machines learn?](https://www.youtube.com/watch?v=IHZwWFHWa-w&ab_channel=3Blue1Brown)
+- [What is backpropagation really doing?](https://www.youtube.com/watch?v=Ilg3gGewQ5U&ab_channel=3Blue1Brown)
+- [The backpropagation computation](https://www.youtube.com/watch?v=tIeHLnjs5U8&ab_channel=3Blue1Brown)
+
+For a _deeper_ introduction to a wide variety of neural networks (e.g., convolutional neural networks, transformers, encoder-decoders, graph neural networks, auto-encoders, ...), we recommand you the course [INFO8010 - Deep Learning](https://github.com/glouppe/info8010-deep-learning) given at ULiege. The professor Gilles Louppe has made a very nice GitHub where he links to its lectures and YouTube videos. 

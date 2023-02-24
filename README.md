@@ -12,7 +12,7 @@ You have two main ways to perform the installation:
 - `Pip` base installation. 
 
 ### `Anaconda` base installation
-For this installation process, you need to have the `Anaconda` python package manager installed on your laptop. It will be required to create a virtual environment for running the tutorial. You can download `Anaconda` from this [link](https://docs.anaconda.com/anaconda/install/). Once you have `Anaconda` on your computer, you first have to install the virtual environment using the command:
+For this installation process, you need to have the `Anaconda` python package manager installed on your laptop. It will be required to create a virtual environment for running the tutorial. You can download `Anaconda` from this [link](https://docs.anaconda.com/anaconda/install/). Note that `Anaconda` comes with over 150 data science packages. Hence, if you do not have the time and disk space (a few minutes and 3GB), you can instead install `Miniconda` from this [link](https://docs.conda.io/en/latest/miniconda.html). Once you have `Anaconda` or `Miniconda` on your computer, you first have to install the virtual environment using the command:
 ```
 conda env create -f MARTA_ENV.yml
 ```

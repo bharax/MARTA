@@ -43,12 +43,15 @@ The tutorial is composed of six sections.
 The main objective of this tutorial is not just to be able to construct a neural network and train it. The idea behind this is to have an engineering approach. Assuming that you face a real-world problem in your job. You will first try to identify the parameters of your problem as usual. Then, you may ask yourself if the use of a neural network to model your problem is a good idea. _Do I have enough data? Is my data of good quality? What is the nature of my data (e.g., an image, a time signal, text, Excel table, arrays, graphs, ...) ?_ Once these questions are answered, you can pick the corresponding neural networks (e.g., images may work with CNN, time signals may work with RNN, text may work with transformers, arrays may work with a simple MLP, graphs may work with graph neural network, and so on and so forth). Afterward, you will construct your database and train your selected network. Finally, you will test your network on unseen data and put it in production. In the end, a neural network is nothing else than a model. Roughly speaking, a model is a mathematical tool that approximates a real-world behavior. So do not see the network as a complicated beast, just see it as a black-box model having its pros and cons. 
 
 ## References
-For a _first_ introduction to deep learning, we recommand you the YouTube channel [3Blue1Brown](https://www.youtube.com/@3blue1brown). The authors have made four videos for explaining the concept of deep neural networks and how to train them: 
+For a _first_ introduction to deep learning, we recommend you the YouTube channel [3Blue1Brown](https://www.youtube.com/@3blue1brown). The authors have made four videos explaining the concept of deep neural networks and how to train them: 
 - [What is a neural network?](https://www.youtube.com/watch?v=aircAruvnKk&ab_channel=3Blue1Brown)
 - [Gradient descent and How machines learn?](https://www.youtube.com/watch?v=IHZwWFHWa-w&ab_channel=3Blue1Brown)
 - [What is backpropagation really doing?](https://www.youtube.com/watch?v=Ilg3gGewQ5U&ab_channel=3Blue1Brown)
 - [The backpropagation computation](https://www.youtube.com/watch?v=tIeHLnjs5U8&ab_channel=3Blue1Brown)
 
-For a _deeper_ introduction to a wide variety of neural networks (e.g., convolutional neural networks, transformers, encoder-decoders, graph neural networks, auto-encoders, ...), we recommand you the course [INFO8010 - Deep Learning](https://github.com/glouppe/info8010-deep-learning) given at ULiege. The professor Gilles Louppe has made a very nice GitHub where he links to its lectures and YouTube videos. 
+For a _deeper_ introduction to a wide variety of neural networks (e.g., convolutional neural networks, transformers, encoder-decoders, graph neural networks, auto-encoders, ...), we recommend you the course [INFO8010 - Deep Learning](https://github.com/glouppe/info8010-deep-learning) given at ULiege. Professor Gilles Louppe has made a very nice GitHub where he links to its lectures and YouTube videos. 
 
-If you want a good book about Deep Learning, we recommend you `Dive into Deep Learning` by Aston Zhang, Zachary C. Lipton, Mu Li, and Alexander J. Smola, available in pdf format [here](https://d2l.ai/d2l-en.pdf).
+If you want a good book about Deep Learning, we recommend `Dive into Deep Learning` by Aston Zhang, Zachary C. Lipton, Mu Li, and Alexander J. Smola, available in pdf format [here](https://d2l.ai/d2l-en.pdf).
+
+## Complementary information
+This tutorial is "_inspired_" by homework given in the course INFO8010 of ULiege in 2020. So we encourage you to have a look at this [repository](https://github.com/glouppe/info8010-deep-learning) if you want more information. 

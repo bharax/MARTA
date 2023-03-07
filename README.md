@@ -21,7 +21,19 @@ The file MARTA_ENV.yml is given in the repository source above. For more informa
 conda activate marta
 ```
 ### `Pip` base installation
-In this approach, you can skip the installation of `Anaconda` and directly install the jupyter-notebook and PyTorch using pip (or pip3). For the installation of jupyter-notebook, you can have a look at [this](https://jupyter.org/install). For the installation of PyTorch, you can follow the instruction [here](https://pytorch.org/get-started/locally/). Select `Stable (1.13.1)`, your OS, `Pip` package, `Python` language, and `CPU` platform. We will not train your network on GPUs for the moment. 
+In this approach, you can skip the installation of `Anaconda` and directly install the jupyter-notebook and PyTorch using pip (or pip3). For the installation of jupyter-notebook, you can have a look at [this](https://jupyter.org/install). For the installation of PyTorch, you can follow the instruction [here](https://pytorch.org/get-started/locally/). Select `Stable (1.13.1)`, your OS, `Pip` package, `Python` language, and `CPU` platform. We will not train your network on GPUs for the moment. You will also need to download `matplotlib` (see [here](https://pypi.org/project/matplotlib/)) to view the graphs and figures in the tutorial and `sklearn` (see [here](https://pypi.org/project/scikit-learn/)) to load the moon database in the practice section.
+
+### Quick installation check
+To verify if all the required packages are installed correctly on your laptop, you may run the following command in a terminal:
+* if you install through `Anaconda` or `Miniconda`, you activate your environment and launch the python script with:
+```
+conda activate marta
+python3 check_packages.py
+```
+* if you install on your own with pip (or pip3), you can launch directly the python script as:
+```
+python3 check_packages.py
+```
 
 ## Launching the jupyter-notebook
 Now that all required packages installed, you can launch the jupyter-notebook as, 

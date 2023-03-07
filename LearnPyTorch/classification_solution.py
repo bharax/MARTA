@@ -55,7 +55,7 @@ class MoonDatabase(torch.utils.data.IterableDataset):
 # ---
 def training(hidden_layer,     # list of number of neurons/layers
              X_train, Y_train, # train data
-             X_test, Y_test,   # test data
+             X_val, Y_val,     # validation data
              nbEpochs,         # total number of epoch
              verbose=True,
              spacing=10
@@ -80,7 +80,9 @@ def training(hidden_layer,     # list of number of neurons/layers
     # dataLoader
     trainData   = MoonDatabase(X_train, Y_train)
     trainLoader = torch.utils.data.DataLoader(trainData, batch_size=32, num_workers=0, pin_memory=False)
-
+    # If you load your samples in the Dataset on CPU and would like to push it during training to the GPU, 
+    # you can speed up the host to device transfer by enabling pin_memory. Here, we do not work with GPU, 
+    # hence we use the default value of this argument. 
     testData   = MoonDatabase(X_test, Y_test)
     testLoader = torch.utils.data.DataLoader(testData, batch_size=32, num_workers=0)
 

@@ -1,7 +1,7 @@
 # MARTA
 **M**achine le**AR**ning **T**utori**A**l
 - **Instructor:** Margaux Boxho
-- **Co-authors:** Noémie Valminck, Lionel Salesses, Caroline Sainvitu, and Thibaut Van Hoof
+- **Co-authors:** Noémie Vlaminck, Lionel Salesses, Caroline Sainvitu, and Thibaut Van Hoof
 - **When:** Thursday 09/03/2023 from 9h to 12h and Friday 10/03/2023 from 9h to 12h
 
 ## Requirements/Prerequisites

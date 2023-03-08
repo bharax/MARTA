@@ -64,12 +64,12 @@ def training(hidden_layer,     # list of number of neurons/layers
     # transfer to torch.Tensor for classification 
     if(not(torch.is_tensor(X_train))):
         X_train = torch.from_numpy(X_train).float()
-    if(not(torch.is_tensor(X_test))):
-        X_test  = torch.from_numpy(X_test).float()
+    if(not(torch.is_tensor(X_val))):
+        X_val  = torch.from_numpy(X_val).float()
     if(not(torch.is_tensor(Y_train))):
         Y_train = torch.from_numpy(Y_train).unsqueeze(1).float()
-    if(not(torch.is_tensor(Y_test))):
-        Y_test  = torch.from_numpy(Y_test).unsqueeze(1).float()
+    if(not(torch.is_tensor(Y_val))):
+        Y_val  = torch.from_numpy(Y_val).unsqueeze(1).float()
 
     # model, optimizer, loss function
     net       = MLP(X_train.shape[1], hidden_layer, 2)
@@ -83,14 +83,14 @@ def training(hidden_layer,     # list of number of neurons/layers
     # If you load your samples in the Dataset on CPU and would like to push it during training to the GPU, 
     # you can speed up the host to device transfer by enabling pin_memory. Here, we do not work with GPU, 
     # hence we use the default value of this argument. 
-    testData   = MoonDatabase(X_test, Y_test)
-    testLoader = torch.utils.data.DataLoader(testData, batch_size=32, num_workers=0)
+    valData   = MoonDatabase(X_val, Y_val)
+    valLoader = torch.utils.data.DataLoader(valData, batch_size=32, num_workers=0)
 
     # --- initialize array
-    training_loss = np.zeros(nbEpochs)
-    testing_loss  = np.zeros(nbEpochs)
-    training_acc  = np.zeros(nbEpochs)
-    testing_acc   = np.zeros(nbEpochs)
+    training_loss    = np.zeros(nbEpochs)
+    validation_loss  = np.zeros(nbEpochs)
+    training_acc     = np.zeros(nbEpochs)
+    validation_acc   = np.zeros(nbEpochs)
     
     # --- training loop
     for i in range(nbEpochs):
@@ -120,32 +120,32 @@ def training(hidden_layer,     # list of number of neurons/layers
         training_acc[i]  = train_acc_epoch/nb
         
         # ----
-        test_loss_epoch  = 0
-        test_acc_epoch   = 0
+        val_loss_epoch  = 0
+        val_acc_epoch   = 0
         nb               = 0
-        for data in testLoader:
+        for data in valLoader:
             # loss
             batch_sz = data.shape[0]
             x        = data[:,[0,1]]
             y        = data[:,[2]].squeeze().long()
             y_pred   = net(x)
             batch_loss = criterion(y_pred,y)
-            test_loss_epoch += batch_loss.detach()
+            val_loss_epoch += batch_loss.detach()
             nb += 1
             
             # --- accuracy
             acc0_epoch = 1 - np.mean(np.abs(y.squeeze().long().detach().numpy() - np.where(y_pred[:,0].detach().numpy()<0, 1, 0)))
             acc1_epoch = 1 - np.mean(np.abs(y.squeeze().long().detach().numpy() - np.where(y_pred[:,1].detach().numpy()<0, 0, 1)))
-            test_acc_epoch += (acc0_epoch+acc1_epoch)/2
+            val_acc_epoch += (acc0_epoch+acc1_epoch)/2
             
-        testing_loss[i] = test_loss_epoch/nb
-        testing_acc[i]  = test_acc_epoch/nb
+        validation_loss[i] = val_loss_epoch/nb
+        validation_acc[i]  = val_acc_epoch/nb
         # ----
         if(verbose and i%spacing==0):
-            print("Epoch: %5d, train_loss=%.4e, test_loss=%.4e, train_acc=%.4e, test_acc=%.4e" %(i,training_loss[i],testing_loss[i],training_acc[i],testing_acc[i]))
+            print("Epoch: %5d, train_loss=%.4e, val_loss=%.4e, train_acc=%.4e, val_acc=%.4e" %(i,training_loss[i],validation_loss[i],training_acc[i],validation_acc[i]))
         # ----
         
-    return net, training_loss, testing_loss, training_acc, testing_acc
+    return net, training_loss, validation_loss, training_acc, validation_acc
 
 # ---
 # Function to plot the decision boundary and data points of a model.
@@ -187,19 +187,19 @@ def plot_decision_boundary(X, y, model, steps=1000, cmap='Paired'):
     
     return fig, ax
 
-def plot_loss_accuracy(nbEpochs, X_test, Y_test, net,                       
-                       training_loss, testing_loss,
-                       training_acc, testing_acc):
+def plot_loss_accuracy(nbEpochs, X_val, Y_val, net,                       
+                       training_loss, validation_loss,
+                       training_acc, validation_acc):
     fig, ax = plt.subplots(1,2, constrained_layout=True)
 
     ax[0].loglog(np.arange(1,nbEpochs+1), training_loss, 'k.-', linewidth=2)
-    ax[0].loglog(np.arange(1,nbEpochs+1), testing_loss, 'b.-', linewidth=2)
+    ax[0].loglog(np.arange(1,nbEpochs+1), validation_loss, 'b.-', linewidth=2)
 
     ax[0].set_xlabel("Epoch", fontsize=25)
     ax[0].set_ylabel("Loss", fontsize=25)
 
     ax[1].semilogx(np.arange(1,nbEpochs+1), training_acc, 'k.-', linewidth=2)
-    ax[1].semilogx(np.arange(1,nbEpochs+1), testing_acc, 'b.-', linewidth=2)
+    ax[1].semilogx(np.arange(1,nbEpochs+1), validation_acc, 'b.-', linewidth=2)
 
 
     ax[1].set_xlabel("Epoch", fontsize=25)
@@ -216,7 +216,7 @@ def plot_loss_accuracy(nbEpochs, X_test, Y_test, net,
 
     fig.set_size_inches(14,4)
 
-    fig, ax = plot_decision_boundary(X_test,Y_test, net, cmap = 'RdBu')
+    fig, ax = plot_decision_boundary(X_val,Y_val, net, cmap = 'RdBu')
     fig.set_size_inches(7,4)
     
     plt.show()

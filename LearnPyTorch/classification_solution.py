@@ -9,11 +9,13 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 plt.rcParams['font.family'] = 'DeJavu Serif'
 plt.rcParams['font.serif'] = ['Times'] #['Times New Roman']
 
+import sys
+
 # ---
 # Neural network implementation
 # ---
 class MLP(nn.Module):
-    def __init__(self, in_size, hidden_units, out_size):
+    def __init__(self, in_size, hidden_units, out_size, activation="ReLU"):
         super(MLP, self).__init__()
         
         self.hidden_units = hidden_units
@@ -21,12 +23,24 @@ class MLP(nn.Module):
         
         # --- input layer
         modules.append(nn.Linear(in_size, hidden_units[0]))
-        modules.append(nn.ReLU())
+        if (activation=="ReLU"):
+            modules.append(nn.ReLU())
+        elif (activation=="Sigmoid"):
+            modules.append(nn.Sigmoid())
+        elif (activation=="Tanh"):
+            module.append(nn.Tanh())
+        else:
+            sys.exit("The activation function %s is not implemented here, select between ReLU, Sigmoid and Tanh" %(activation))
         
         # --- hidden layers
         for i in range(len(hidden_units)-1):
             modules.append(nn.Linear(hidden_units[i], hidden_units[i+1]))
-            modules.append(nn.ReLU())
+            if (activation=="ReLU"):
+                modules.append(nn.ReLU())
+            elif (activation=="Sigmoid"):
+                modules.append(nn.Sigmoid())
+            else:
+                module.append(nn.Tanh())
         
         # --- output layer
         modules.append(nn.Linear(hidden_units[-1], out_size))
@@ -53,10 +67,14 @@ class MoonDatabase(torch.utils.data.IterableDataset):
 # ---
 # Training loop
 # ---
-def training(hidden_layer,     # list of number of neurons/layers
-             X_train, Y_train, # train data
-             X_val, Y_val,     # validation data
-             nbEpochs,         # total number of epoch
+def training(hidden_layer,          # list of number of neurons/layers
+             X_train, Y_train,      # train data
+             X_val, Y_val,          # validation data
+             nbEpochs,              # total number of epoch
+             learning_rate=0.01,    # learning rate
+             optimizer_name="adam", # type of optimizator
+             batch_size=32,         # batch_size
+             activation_fun="ReLU", # name of the activation function
              verbose=True,
              spacing=10
             ):
@@ -74,17 +92,23 @@ def training(hidden_layer,     # list of number of neurons/layers
     # model, optimizer, loss function
     net       = MLP(X_train.shape[1], hidden_layer, 2)
     criterion = nn.CrossEntropyLoss()
-    learning_rate = 0.01
-    optimizer = torch.optim.Adam(net.parameters(), lr=learning_rate)
+    optimizer = None
+    if (optimizer_name=="adam"):
+        optimizer = torch.optim.Adam(net.parameters(), lr=learning_rate)
+    elif (optimizer_name=="sgd"):
+        optimizer = torch.optim.SGD(params=net.parameters(), lr=learning_rate)
+    else:
+        sys.exit("The optimizer %s is not implemented here, select between adam and sgd" %(optimizer_name))
+        
 
     # dataLoader
     trainData   = MoonDatabase(X_train, Y_train)
-    trainLoader = torch.utils.data.DataLoader(trainData, batch_size=32, num_workers=0, pin_memory=False)
+    trainLoader = torch.utils.data.DataLoader(trainData, batch_size=batch_size, num_workers=0, pin_memory=False)
     # If you load your samples in the Dataset on CPU and would like to push it during training to the GPU, 
     # you can speed up the host to device transfer by enabling pin_memory. Here, we do not work with GPU, 
     # hence we use the default value of this argument. 
     valData   = MoonDatabase(X_val, Y_val)
-    valLoader = torch.utils.data.DataLoader(valData, batch_size=32, num_workers=0)
+    valLoader = torch.utils.data.DataLoader(valData, batch_size=batch_size, num_workers=0)
 
     # --- initialize array
     training_loss    = np.zeros(nbEpochs)

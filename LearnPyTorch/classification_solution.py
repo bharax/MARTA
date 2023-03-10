@@ -45,12 +45,15 @@ class MLP(nn.Module):
         # --- output layer
         modules.append(nn.Linear(hidden_units[-1], out_size))
         
+        # --- sorftmax activation layer
+        modules.append(nn.Softmax(dim=1))
+        
+        # --- sequential module
         self.net = nn.Sequential(*modules)
         
     # --- forward pass
     def forward(self, x):
-        out = self.net(x)
-        return out
+        return self.net(x)
 
 # ---
 # Database
@@ -127,18 +130,16 @@ def training(hidden_layer,          # list of number of neurons/layers
         for data in trainLoader:
             batch_sz = data.shape[0]
             x        = data[:,[0,1]]
-            y        = data[:,[2]].squeeze().long()
+            y        = data[:,[2]].squeeze()
             y_pred   = net(x)
             optimizer.zero_grad()
-            batch_loss = criterion(y_pred,y)
+            batch_loss = criterion(y_pred,y.long())
             batch_loss.backward()
             optimizer.step()
             train_loss_epoch += batch_loss.detach()
             nb += 1
             # --- accuracy
-            acc0_epoch = 1 - np.mean(np.abs(y.squeeze().long().detach().numpy() - np.where(y_pred[:,0].detach().numpy()<0, 1, 0)))
-            acc1_epoch = 1 - np.mean(np.abs(y.squeeze().long().detach().numpy() - np.where(y_pred[:,1].detach().numpy()<0, 0, 1)))
-            train_acc_epoch += (acc0_epoch+acc1_epoch)/2
+            train_acc_epoch += 1 - torch.mean(torch.abs(y.squeeze() - torch.argmax(y_pred,1)))
             
         training_loss[i] = train_loss_epoch/nb
         training_acc[i]  = train_acc_epoch/nb
@@ -151,16 +152,14 @@ def training(hidden_layer,          # list of number of neurons/layers
             # loss
             batch_sz = data.shape[0]
             x        = data[:,[0,1]]
-            y        = data[:,[2]].squeeze().long()
+            y        = data[:,[2]].squeeze()
             y_pred   = net(x)
-            batch_loss = criterion(y_pred,y)
+            batch_loss = criterion(y_pred,y.long())
             val_loss_epoch += batch_loss.detach()
             nb += 1
             
             # --- accuracy
-            acc0_epoch = 1 - np.mean(np.abs(y.squeeze().long().detach().numpy() - np.where(y_pred[:,0].detach().numpy()<0, 1, 0)))
-            acc1_epoch = 1 - np.mean(np.abs(y.squeeze().long().detach().numpy() - np.where(y_pred[:,1].detach().numpy()<0, 0, 1)))
-            val_acc_epoch += (acc0_epoch+acc1_epoch)/2
+            val_acc_epoch += 1 - torch.mean(torch.abs(y.squeeze() - torch.argmax(y_pred,1)))
             
         validation_loss[i] = val_loss_epoch/nb
         validation_acc[i]  = val_acc_epoch/nb
@@ -191,8 +190,8 @@ def plot_decision_boundary(X, y, model, steps=1000, cmap='Paired'):
         labels = model(torch.FloatTensor(np.c_[xx.ravel(), yy.ravel()]))
 
     # Plot decision boundary in region of interest
-    z = np.where(labels[:,0]<0,1,0).reshape(xx.shape)
-
+    z = np.where(labels[:,1]>0.5,1,0).reshape(xx.shape)
+    
     fig, ax = plt.subplots()
     ax.contourf(xx, yy, z, cmap=cmap, alpha=0.5)
 
